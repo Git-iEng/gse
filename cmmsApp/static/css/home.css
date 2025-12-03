@@ -573,6 +573,7 @@ body {
 .section-about-lv-electrical-about- {
   background: #fff;
   padding: clamp(36px, 6vw, 80px) 0;
+  padding-top: -40px;
 }
 
 .container-lv-electrical-about- {
@@ -740,11 +741,20 @@ body {
   .rating-card-lv-electrical-about- {
     order: 3;
   }
+    .section-about-lv-electrical-about-{
+    padding-top: -40px;
+  }
 }
 
 @media (max-width: 680px) {
   .grid-lv-electrical-about- {
     grid-template-columns: 1fr;
+  }
+  .section-about-lv-electrical-about-{
+    padding-top: 40px;
+  }
+  .section-about-lv-electrical-about-{
+    padding-top: 40px;
   }
 
   .rating-card-lv-electrical-about- {
@@ -3164,5 +3174,44 @@ section+section {
   .intro-lv-electrical-process,
   .timeline-lv-electrical-process {
     padding: 0 0; /* keep inner spacing controlled */
+  }
+}
+/* ===== MOBILE TWEAKS FOR PROJECT CARDS ===== */
+@media (max-width: 640px) {
+
+  /* Let the section span full width on phones */
+  .lv-electric-panel-project {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Container fills the viewport with small, even padding */
+  .lv-epp-container {
+    max-width: none;
+    margin: 0;
+    padding-inline: 12px;  /* equal left/right gutter */
+  }
+
+  /* One card per row, full width */
+  .lv-epp-grid {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+  }
+
+  .lv-epp-card {
+    width: 100%;
+    margin-inline: 0;      /* no extra space on the right */
+  }
+
+  /* Make sure the media fills the card width with no inner gap */
+  .lv-epp-media {
+    width: 100%;
+  }
+
+  .lv-epp-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
