@@ -895,3 +895,36 @@ html { scroll-behavior: smooth; }
     min-height: 220px;
   }
 }
+/* ==============================
+   FIX: Location card link colors
+   ============================== */
+.ieng-locations a{
+  color: inherit;                 /* stop browser default blue */
+  text-decoration: none;          /* remove underline */
+  font-weight: 700;
+}
+
+.ieng-locations .ieng-loc-row a{
+  color: var(--bo-accent);        /* use your theme teal */
+  text-decoration: underline;     /* subtle, readable */
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease, opacity 0.2s ease;
+}
+
+.ieng-locations .ieng-loc-row a:hover{
+  color: #155e75;                 /* darker teal on hover */
+  text-decoration-color: rgba(21, 94, 117, 0.6);
+}
+
+.ieng-locations .ieng-loc-row a:visited{
+  color: var(--bo-accent);        /* prevent purple visited */
+}
+
+/* Optional: keyboard focus (looks pro) */
+.ieng-locations .ieng-loc-row a:focus-visible{
+  outline: 3px solid rgba(15, 118, 110, 0.25);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
