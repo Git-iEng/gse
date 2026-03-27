@@ -7,6 +7,9 @@ from django.core.exceptions import ValidationError
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.utils import timezone
 from django.contrib import messages
+import requests
+from django.conf import settings
+
 
 from pathlib import Path
 from datetime import datetime
@@ -101,6 +104,11 @@ def _send_contact_email_async(subject: str, text_body: str, html_body: str | Non
 def request_demo_view(request):
     if request.method != "POST":
         return redirect("/")
+    
+    if not verify_recaptcha(request):
+        messages.error(request, "Please complete the CAPTCHA.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
 
     # Pull fields
     full_name = request.POST.get("full_name", "").strip()
@@ -181,7 +189,10 @@ def request_demo_view(request):
 
 
 def home(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {
+        "RECAPTCHA_SITE_KEY": settings.RECAPTCHA_SITE_KEY
+    })
+
 
 
 def request_demo(request):
@@ -190,15 +201,22 @@ def request_demo(request):
 
 
 
-def contact(request):     return render(request, "contact.html")
+def contact(request):     return render(request, "contact.html", {
+        "RECAPTCHA_SITE_KEY": settings.RECAPTCHA_SITE_KEY
+    })
 
-def about(request):       return render(request, "about.html")
+
+def about(request):       return render(request, "about.html", {
+        "RECAPTCHA_SITE_KEY": settings.RECAPTCHA_SITE_KEY
+    })
 
 def sitemap(request):
     with staticfiles_storage.open('sitemap.xml') as sitemap_file:
         return HttpResponse(sitemap_file, content_type='application/xml')
 
-def contact(request):     return render(request, "neplan-contact.html")
+def contact(request):     return render(request, "neplan-contact.html", {
+        "RECAPTCHA_SITE_KEY": settings.RECAPTCHA_SITE_KEY
+    }   )
 def contact_section(request):
     form = ContactForm(request.POST or None)
 
@@ -306,6 +324,11 @@ def contact_block_submit(request):
     """
     if request.method != "POST":
         return redirect(request.META.get("HTTP_REFERER", "/"))
+    
+    if not verify_recaptcha(request):
+        messages.error(request, "Please complete the CAPTCHA.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
 
     name    = (request.POST.get("name")    or "").strip()
     email   = (request.POST.get("email")   or "").strip()
@@ -409,3 +432,26 @@ def country_list(request):
   return JsonResponse(data, safe=False)
 def contact_thanks(request):
     return render(request, "contact_thanks.html", {})
+
+
+def verify_recaptcha(request):
+    captcha_response = (request.POST.get("g-recaptcha-response") or "").strip()
+
+    if not captcha_response:
+        return False
+
+    data = {
+        "secret": settings.RECAPTCHA_SECRET_KEY,
+        "response": captcha_response,
+    }
+
+    try:
+        response = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data=data,
+            timeout=10
+        )
+        result = response.json()
+        return result.get("success", False)
+    except requests.RequestException:
+        return False
