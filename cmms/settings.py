@@ -34,9 +34,8 @@ else:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
  
-ALLOWED_HOSTS = ["gse.ieng.tech", ".ieng.tech", "*"]
+ALLOWED_HOSTS = ["gse.ieng.tech", ".ieng.tech"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
 
 CSRF_TRUSTED_ORIGINS = ["https://*.ieng.tech"]
  
@@ -154,15 +153,12 @@ EMAIL_HOST_USER = 'test@ieng.tech'  # Your email address
 EMAIL_HOST_PASSWORD = 'test@iEng'  # Your email password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CONTACT_RECIPIENTS = [
-    "shila@iengaust.com.au", 
+    "shila@iengaust.com.au",
     "kushankur@iengaust.com.au",
     "amar@iengaust.com.au",
 ]
 CONTACT_RECIPIENTS = ["shila@iengaust.com.au","amar@iengaust.com.au", "kushankur@iengaust.com.au",]
 DEMO_RECIPIENTS = CONTACT_RECIPIENTS
- 
-# CONTACT_EMAIL = 'diksha@iengaust.com.au'
- 
  
 # Who receives the notifications
 CONTACT_INBOX = CONTACT_RECIPIENTS[0]
